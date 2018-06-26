@@ -1,0 +1,162 @@
+﻿@model Travel_Project_MVC.Models.ViewModel.Hotel.BookingViewModel
+
+@{
+    ViewBag.Title = "Hotel Booking";
+}
+
+<h2>Hotel Booking</h2>
+
+<script>
+    $(document).ready({
+
+
+    });
+
+    function RedirectToEdit(bookingId) {
+        $.ajax({
+            url: '/Hotel/EditBookingById',
+            data: { BookingId: bookingId },
+            success: function (data) {
+                $('#divPageContent').html(data);
+            },
+            error: function (data) { }
+        });
+    }
+
+    function BackToListing() {
+        $.ajax({
+            url: '/Home/HomePage',
+            success: function (data) {
+
+                $('#divPageContent').html(data);
+            },
+            error: function (data) {; }
+        });
+    }
+
+    function BookingCreateUpdate() {
+        var vm = {};
+
+        vm.BookingId = $('#BookingId').val();
+        vm.UserId = $('#UserId').val();
+        vm.BookDateFrom = $('#BookDateFrom').val();
+        vm.BookDateTo = $('#BookDateTo').val();
+        vm.HotelId = $('#HotelId').val();
+        vm.Rooms = $('#Rooms').val();
+        vm.PersonStay = $('#PersonStay').val();
+
+        $.ajax({
+            url: '/Hotel/BookingCreateUpdate',
+            data: vm,
+            type: 'POST',
+            success: function (data) {
+                if (data.ReturnStatusStr == 'success') {
+                    RedirectToEdit(data.recordId);
+                }
+            },
+            error: function (data) {; }
+        });
+    }
+
+    function CancelBooking() {
+        if (confirm('Are you sure you want to delete this record?'))
+        {
+            $.ajax({
+                url: '/Hotel/CancelBooking',
+                data: {bookingId: '@Model.BookingId'},
+                type: 'POST',
+                success: function (data) {
+                    if (data.ReturnStatusStr == 'success') {
+                        BackToListing();
+                    }
+                },
+                error: function (data) {; }
+            });
+        }
+    }
+</script>
+
+<div id="UserListingDiv">
+    <div class="row">
+        <div class="col-lg-12">
+            @Html.HiddenFor(model => model.BookingId)
+            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.HotelId)
+            <table class="responstable">
+                <tr>
+                    <th>
+                        Field
+                    </th>
+                    <th>
+                        Value
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        Book Date From
+                    </td>
+                    <td>
+                        @{
+                            if (Model.BookingId == Guid.Empty)
+                            {
+                                @Html.TextBoxFor(model => model.BookDateFrom, new { @type = "date", @Value = Model.BookDateFrom.ToString("yyyy-MM-dd") })
+
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.BookDateFrom, new { disabled = "disabled", @readonly = "readonly", @Value = Model.BookDateFrom.ToString("yyyy-MM-dd") })
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Book Date To
+                    </td>
+                    <td>
+                        @{
+                            if (Model.BookingId == Guid.Empty)
+                            {
+                                @Html.TextBoxFor(model => model.BookDateTo, new { @type = "date", @Value = Model.BookDateTo.ToString("yyyy-MM-dd") })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.BookDateTo, new { disabled = "disabled", @readonly = "readonly", @Value = Model.BookDateTo.ToString("yyyy-MM-dd") })
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Rooms
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Rooms)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        PersonStay
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.PersonStay)
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-12"></div>
+        <div class="col-lg-12 text-center">
+            <input class="button" type="button" onclick="BookingCreateUpdate()" value="Create/Update" />
+            <input class="button" type="button" onclick="BackToListing()" value="Back" />
+            @{
+                if (Model.BookingId != Guid.Empty)
+                {
+                    <input class="button" type="button" onclick="CancelBooking()" value="Cancel Booking" />
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+

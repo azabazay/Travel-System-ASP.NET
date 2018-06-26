@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="../Content/images/favicon.ico">
+    <link rel="shortcut icon" href="../Content/images/favicon.ico" />
+
+    <link rel="stylesheet" href="../Content/style_1.css">
+    <link rel="stylesheet" href="../Content/stuck.css">
+    <link rel="stylesheet" href="../Content/style.css">
+    <link rel="stylesheet" href="../Content/touchTouch.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+
+<head>
+    <script type="text/javascript">
+        function RedirectToUserListing()
+        {
+            alert('UserListing');
+        }
+    </script>
+</head>
+
+<body class="page1" id="top">
+    <!--==============================
+                  header
+    =================================-->
+    <header style="padding-top: 0px;">
+        <!--==============================
+                    Stuck menu
+        =================================-->
+        <section id="stuck_container" class="content" style="padding-bottom: 0px;">
+            <div class="container">
+                <div class="row">
+                    <div class="grid_12">
+                        <h1>
+                            <a href="index.html">
+                                <img src="../Content/images/logo.jpeg" alt="Logo alt" width="280" height="220">
+                            </a>
+                        </h1>
+                        <div class="navigation" style="padding-top: 110px;">
+                            <nav>
+                                <ul class="sf-menu">
+                                    <li>@Html.ActionLink("Home", "HomePage", "Home")</li>
+                                    <li>@Html.ActionLink("My Bookings", "ViewMyBookings", "Hotel")</li>
+                                    @*<li><a href="index-2.html">reservation</a></li>
+                                    <li><a href="index-3.html">blog</a></li>*@
+                                    @*<li>@Html.ActionLink("Menu", "UserListing", "User")</li>*@
+                                    @*<li>@Html.ActionLink("Blog", "UserListing", "User")</li>
+                                    <li>@Html.ActionLink("Contacts", "UserListing", "User")</li>*@
+                                    <li>@Html.ActionLink("Users", "UserListing", "User")</li>
+                                </ul>
+                                
+                            </nav>
+                            @Html.Partial("_LoginPartial")
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </header>
+
+    <!--=====================
+              Content
+    ======================-->
+    <section class="content">
+        <div class="container body-content" id="divPageContent">
+            @RenderBody()
+        </div>
+    </section>
+    <!--==============================
+                  footer
+    =================================-->
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="grid_12">
+                    <div class="socials">
+                        <a href="#" class="fa fa-twitter"></a>
+                        <a href="#" class="fa fa-facebook"></a>
+                        <a href="#" class="fa fa-google-plus"></a>
+                        <a href="#" class="fa fa-pinterest"></a>
+                    </div>
+                    <div class="copyright">
+                        <span class="brand">KazRoyalTour </span> &copy; <span id="copyright-year"></span> | <a href="#">Privacy Policy</a> <div>Website designed by <a href="http://www.google.com/" rel="nofollow">KazRoyalTour</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

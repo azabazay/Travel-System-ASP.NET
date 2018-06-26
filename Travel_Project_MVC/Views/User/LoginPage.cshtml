@@ -1,0 +1,127 @@
+﻿@model Travel_Project_MVC.Models.ViewModel.Login.LoginViewModel
+
+@{
+    Layout = null;
+
+    ViewBag.Title = "Login";
+}
+
+@{
+    string UserName = "UserName";
+    string Password = "Password";
+    string Login = "Login";
+}
+
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="../Content/stuck.css">
+    <link rel="stylesheet" href="../Content/style.css">
+    <link rel="stylesheet" href="../Content/style.scss">
+    <link rel="stylesheet" href="../Content/style_1.css">
+    <link rel="stylesheet" href="../Content/touchTouch.css">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $('#btnSubmit').on('click', function (e) {
+            SubmitDataForLogin();
+        });
+
+        $('#btnRegister').on('click', function (e) {
+            RedirectToRegister();
+        });
+    });
+
+    function SubmitDataForLogin()
+    {
+        var userName = $('#UserName').val();
+        var password = $('#Password').val();
+
+        var viewModelObj = {};
+
+        viewModelObj.UserName = userName;
+        viewModelObj.Password = password;
+
+        $.ajax({
+            url: '/User/Login',
+            type: 'POST',
+            data: { UserName: userName, Password: password },
+            success: function (data)
+            {
+                debugger;
+                if (data.ReturnStatusStr == '@Travel_Project_MVC.Enum.ReturnStatus.success')
+                {
+                    RedirectToHome();
+                }
+                else
+                {
+                    var errorMessages = '<ul>';
+
+                    data.ErrorMessages.forEach(function (item, index) {
+                        errorMessages += '<li>' + item + '</li>'
+                    });
+
+                    errorMessages += '</ul>';
+
+                    $('#LoginErrorDiv').html(errorMessages);
+                }
+            },
+            error: function (data)
+            { }
+        });
+    }
+
+    function RedirectToHome()
+    {
+        window.location.href = '/Home/HomePage';
+    }
+
+    function RedirectToRegister()
+    {
+        window.location.href = '/User/EditUser?userId=@Guid.Empty';
+    }
+</script>
+
+<div id="LoginPageDiv" style="align-content: center;">
+    <div class="row" id="LoginErrorDiv">
+
+    </div>
+    <div class="row">
+        <div class="col-lg-1 m-t-md">
+            @Html.Label(UserName)
+        </div>
+        <div class="col-lg-4">
+            @Html.EditorFor(model => model.UserName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1 m-t-sm">
+            @Html.Label(Password)
+        </div>
+        <div class="col-lg-4">
+            @Html.TextBoxFor(model => model.Password, new { @class = "form-control", placeholder = "Password", type = "password" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+            <input class="button" type="button" id="btnSubmit" value="@Login" />
+            <input class="button" type="button" id="btnRegister" value="Register" />
+        </div>
+    </div>
+</div>

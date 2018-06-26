@@ -1,0 +1,130 @@
+﻿@model IEnumerable<Travel_Project_MVC.Models.ViewModel.Login.UserListingViewModel>
+
+@{
+    ViewBag.Title = "UserListing";
+}
+
+<h2>User List</h2>
+
+<script>
+    $(document).ready({
+
+    
+    });
+
+    function RefreshListing() {
+        $.ajax({
+            url: '/User/UserListing',
+            success: function (data) {
+
+                $('#divPageContent').html(data);
+            },
+            error: function (data) {; }
+        });
+    }
+
+    function RedirectToEdit(userId)
+    {
+        $.ajax({
+            url: '/User/EditUser',
+            data: { userId: userId },
+            success: function (data) {
+                $('#divPageContent').html(data);
+            },
+            error: function(data){}
+        });
+    }
+
+    function CreateNewUser()
+    {
+        $.ajax({
+            url: '/User/EditUser',
+            data: { userId: '@Guid.Empty' },
+            success: function (data) {
+                $('#divPageContent').html(data);
+            },
+            error: function (data) { }
+        });
+    }
+
+    function DeleteUser(userId) {
+        if (confirm('Are you sure you want to delete this record?')) {
+            $.ajax({
+                url: '/User/DeleteUser',
+                data: { userId: userId },
+                success: function (data) {
+                    RefreshListing();
+                },
+                error: function (data) { }
+            });
+        }
+    }
+</script>
+
+<div id="UserListingDiv pad1">
+    <div class="row">
+        <div class="col-lg-12 text-right">
+            <input type="button" onclick="CreateNewUser()" value="Create" class="button" />
+        </div>
+        <div class="col-lg-12"></div>
+        <div class="col-lg-12">
+            <table class="responstable">
+                <tr>
+                    <th class="">
+                        <b>No</b>
+                    </th>
+                    <th class="col-lg-2">
+                        <b>Login Id</b>
+                    </th>
+                    <th class="col-lg-2">
+                        <b>First Name</b>
+                    </th>
+                    <th class="col-lg-2">
+                        <b>Last Name</b>
+                    </th>
+                    <th class="col-lg-2">
+                        <b>Mobile</b>
+                    </th>
+                    <th class="col-lg-2">
+                        <b>Email</b>
+                    </th>
+                    <th class="col-lg-2">
+                        <b>Action</b>
+                    </th>
+                </tr>
+
+                @{
+                    int i = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="">
+                                @i
+                            </td>
+                            <td class="col-lg-2">
+                                @Html.DisplayFor(modelItem => item.LoginId)
+                            </td>
+                            <td class="col-lg-2">
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td class="col-lg-2">
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td class="col-lg-2">
+                                @Html.DisplayFor(modelItem => item.Mobile)
+                            </td>
+                            <td class="col-lg-2">
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td class="col-lg-2">
+                                <a href="#" onclick="RedirectToEdit('@item.UserId')">Edit</a> | <a href="#" onclick="DeleteUser('@item.UserId')">Delete</a>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
